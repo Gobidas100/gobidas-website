@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sign up – Gobidas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>Gobidas – Sign up</header>
+
+  <main>
+    <h1>Create your Gobidas account</h1>
+
+    <label>Email</label>
+    <input id="email" type="email" placeholder="you@example.com">
+
+    <label>Password</label>
+    <input id="password" type="password" placeholder="At least 6 characters">
+
+    <button id="signupBtn">Sign up</button>
+
+    <button class="google" id="googleBtn">Continue with Google</button>
+
+    <p id="error"></p>
+
+    <p class="small">
+      Already have an account?
+      <a href="login.html">Log in</a>
+    </p>
+  </main>
+
+  <!-- Firebase + auth logic -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    // Signup page logic
+    document.getElementById('signupBtn').onclick = async () => {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      const errorEl = document.getElementById('error');
+
+      errorEl.textContent = "";
+      try {
+        await auth.createUserWithEmailAndPassword(email, pass);
+        window.location = "login.html";
+      } catch (e) {
+        errorEl.textContent = e.message;
+      }
+    };
+
+    document.getElementById('googleBtn').onclick = async () => {
+      const errorEl = document.getElementById('error');
+      errorEl.textContent = "";
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await auth.signInWithPopup(provider);
+        window.location = "login.html";
+      } catch (e) {
+        errorEl.textContent = e.message;
+      }
+    };
+  </script>
+</body>
+</html>

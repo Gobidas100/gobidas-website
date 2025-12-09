@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Log in – Gobidas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>Gobidas – Log in</header>
+
+  <main>
+    <h1>Log in to Gobidas</h1>
+
+    <label>Email</label>
+    <input id="email" type="email" placeholder="you@example.com">
+
+    <label>Password</label>
+    <input id="password" type="password" placeholder="Your password">
+
+    <button id="loginBtn">Log in</button>
+
+    <button class="google" id="googleBtn">Continue with Google</button>
+
+    <p id="error"></p>
+
+    <p class="small">
+      No account yet?
+      <a href="signup.html">Sign up</a>
+    </p>
+  </main>
+
+  <!-- Firebase + auth logic -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    // Login page logic
+    document.getElementById('loginBtn').onclick = async () => {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      const errorEl = document.getElementById('error');
+
+      errorEl.textContent = "";
+      try {
+        await auth.signInWithEmailAndPassword(email, pass);
+        alert("Logged in! (Here you will go to Gobidas dashboard later)");
+        // window.location = "dashboard.html"; // later
+      } catch (e) {
+        errorEl.textContent = e.message;
+      }
+    };
+
+    document.getElementById('googleBtn').onclick = async () => {
+      const errorEl = document.getElementById('error');
+      errorEl.textContent = "";
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await auth.signInWithPopup(provider);
+        alert("Logged in with Google!");
+        // window.location = "dashboard.html"; // later
+      } catch (e) {
+        errorEl.textContent = e.message;
+      }
+    };
+  </script>
+</body>
+</html>

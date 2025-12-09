@@ -77,3 +77,65 @@ p.small {
   color: red;
   font-size: 13px;
 }
+/* ---- Gobidas chat layout ---- */
+
+.chat-main {
+  max-width: 900px;
+  margin: 10px auto;
+  background: #f8c796;
+  border-radius: 12px;
+  border: 3px solid #c26a19;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 80px);
+}
+
+#chatWindow {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.msg {
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  max-width: 80%;
+  white-space: pre-wrap;
+}
+
+.msg.user {
+  background: #ffdf9b;
+  margin-left: auto;
+  font-weight: bold;
+}
+
+.msg.ai {
+  background: #ffe7c1;
+  margin-right: auto;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.input-row input {
+  flex: 1;
+}
+
+/* Phone layout */
+@media (max-width: 600px) {
+  header {
+    font-size: 20px;
+    text-align: center;
+  }
+  main,
+  .chat-main {
+    max-width: none;
+    margin: 6px;
+    height: calc(100vh - 70px);
+  }
+}

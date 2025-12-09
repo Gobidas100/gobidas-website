@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Gobidas – Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>Gobidas – Chat</header>
+
+  <main class="chat-main">
+    <div id="chatWindow"></div>
+
+    <div class="input-row">
+      <input id="chatInput" placeholder="Ask Gobidas..." autocomplete="off">
+      <button id="sendBtn">Send</button>
+    </div>
+
+    <p id="status" class="small"></p>
+  </main>
+
+  <script>
+    const API_URL = "http://localhost:3000/chat";  // your laptop server
+    const chatWindow = document.getElementById("chatWindow");
+    const chatInput  = document.getElementById("chatInput");
+    const sendBtn    = document.getElementById("sendBtn");
+    const statusEl   = document.getElementById("status");
+
+    function addMessage(text, type) {
+      const div = document.createElement("div");
+      div.className = "msg " + type;
+      div.textContent = text;
+      chatWindow.appendChild(div);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      chatInput.value = "";
+      addMessage(text, "user");
+
+      statusEl.textContent = "Talking to Gobidas...";
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+
+        let reply = "";
+        if (!res.ok) {
+          reply = "Gobidas Artificial Intelligence is turned off.";
+        } else {
+          const data = await res.json();
+          reply = data.reply || "Gobidas didn’t answer.";
+          if (reply.includes("TURNED OFF")) {
+            reply = "Gobidas Artificial Intelligence is turned off.";
+          }
+        }
+        addMessage(reply, "ai");
+      } catch (err) {
+        addMessage("Gobidas Artificial Intelligence is turned off.", "ai");
+      }
+      statusEl.textContent = "";
+    }
+
+    sendBtn.onclick = sendMessage;
+    chatInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
+</body>
+</html>
